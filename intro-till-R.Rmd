@@ -1,0 +1,728 @@
+---
+title: "Ferrologics Data Scientist Program"
+subtitle: "Introduktion till R programmering"
+author: "Zaida Liendeborg"
+date: "14 augusti 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### R och RStudio
+
+Platformen som du ska arbeta i är RStudio. RStudio är en så kallad **IDE (Integrated Development Environment)** och programmeringsspråket heter R. 
+
+I RStudio finns det fyra olika fönster: "Global Environment", "File", "Console", "R script".
+
+1. Alla objekt som skapas i R sparas i **Global Environment**. Det finner du i den övre delen till höger av skärmen.
+
+2. Fönstret i nedre delen till höger ser du **Files** där du hittar filerna som finns i din dator. Det går också se **plottar**, **dokumentationer om funktioner** och vilka **paket** som finns installerade i din RStudio.
+
+3. För att skriva R-skript öppnas ett nytt fönster med **R script**. Det brukar vara under Global environment.
+
+4. I **Console** ser vi resultatet när vi kör R-skript. Varningar och felmeddelande ser vi också i den här rutan. Det går även att skriva kod i consolen, dock går det inte att spara koden. Consolen finner du under R script fönster.
+
+
+### R som miniräknare
+
+Liksom alla programmeringsspråk kan R användas som miniräknare.
+
+1. Gör följande beräkningar i "Console"
+
+```{r, eval=FALSE}
+# Addition
+2 + 2
+
+# Subtraktion
+10 - 8
+
+# Multiplikation
+10*10
+
+#Division 
+100/2
+
+# Exponera
+2^2 
+2**2
+
+```
+
+2. Det finns också såklart en konstanter i R. 
+
+```{r, eval=FALSE }
+# Pi
+pi
+
+# e
+exp(1)
+```
+
+3. Utöver numeriska värdena och konstanter finns det också matematiska funktioner. 
+
+```{r, eval=FALSE}
+# Logaritm
+log(100)
+
+# Rot
+sqrt(100)
+
+# Absolut värde
+abs(-3)
+
+#Trigonometriska funktioner
+cos(pi)
+sin(pi)
+tan(pi)
+```
+
+### Objekt och variabel
+
+Du kan alltid spara dina beräkningar i R. När beräkningarna är nedsparade så kallas det för **objekt**. Objekt kan vara olika typer av element så som textsträng, numeriska värden, faktor, etc.
+
+Objekt sparas enkelt med en **<-** eller **=**. Prova köra kod nedan för att skapa vektorer.
+
+```{r }
+# Numerisk variabel
+minNum<- 2017
+
+# Textsträng
+minText<- "Kalle Anka"
+
+```
+
+### Variabeltyper
+
+Det finns olika variabeltyper i R och de vanligaste beskrivs i tabellen nedan.
+
+Beskrivning    | Synonymer                    |  typeof() | Exempel
+------------   | ---------------------------- | --------- | -------
+Heltal         | int, numeric                 | integer   | -2, 0, 1
+Reella tal     | real, double, float, numeric | double    | 1.03, 0.22
+Komplexa tal   | cplx                         | complex   | 1+2i
+Logiska värden | booelan, bool, logi          | logical   | TRUE, FALSE
+Text           | string, char                 | character | "Hello R!"
+
+
+För att undersöka typ av variabler kan du använda funktionen **class()**
+
+```{r}
+class(minNum)
+class(minText)
+```
+
+För att konvertera en typ av variabel till någon annan kan funktioner i tabellen nedan användas. 
+
+Funktion        | Typ
+--------------- |-------
+as.numeric()    | numerisk
+as.character()  | textsträng
+as.integer()    | integer
+as.factor()     | faktor
+as.data.frame() | data frame
+as.logical()    | logiska värde
+as.Date()       | datum
+
+Exempel:
+
+```{r}
+# Ändra numerisk vektorn testScore till en sträng
+text_minNum<- as.character(minNum)
+class(text_minNum)
+
+factor_minText<- as.factor(minText)
+class(factor_minText)
+```
+
+
+#### 1. Vektorer
+
+Vektorer är ett objekt i R som innehåller en eller flera element. En vektor kan endast innehålla en typ av variabel. Det vanligaste sättet att skapa en vektor är genom **c()**. 
+
+```{r}
+# Numerisk vektor
+numvec = c(1,4,7)
+
+# Textvektor
+charvec<- c("Kalle", "Anka")
+```
+
+#### 2. Faktorvariabel
+
+En annan typ av variabel är den såkallade faktorer, *factor*. Faktorvariabler används främst för att spara minne och för analysfunktioner. Dummyvariabler är ett exempel av faktorvariabel. 
+
+Textdata som läses in i R konverteras till faktor om inte argumentet
+**stringAsFactors = FALSE**. För att få en bättre bild av faktorvariabler se koden nedan.
+
+```{r}
+# minText är en textvektor
+minText<- c("A", "B", "A", "A")
+
+# Konvertera minText till faktorvariabel med as.factor
+minFaktor<- as.factor(minText)
+
+minFaktor
+
+# För att undersöka klassen av vektorn minFaktor
+class(minFaktor)
+
+# För att undersöka vilka unika värden finns på minFaktor 
+levels(minFaktor)
+
+```
+
+#### 3. Logik
+
+Logiska värdena förekommer ofta i programmeringsvärlden. De logiska värdena i R är: **TRUE**, **FALSE** och **NA**. 
+
+#### Logiska operatorer
+
+Logiska operatorer är de operatorer som bara kan användas på logiska vektorer. Det kallas även för *boolsk algebra*. 
+
+De viktigaste operatorerna i R visas i tabellen nedan. 
+
+Operator | Symbol i R
+-------- | ---------- 
+och (and)|    &
+eller(or)|    \| 
+icke(not)|    !
+
+#### Relationsoperatorer
+
+Man vill ofta jämföra olika vektorer för att sedan indexera en datamängd. Detta görs med hjälp av relationsoperatorer som beskrivs nedan.
+
+1. Använder relationsoperatorer för att jämföra olika variabler. 
+2. Relationsoperatorer returnerar logiska värde.
+3. Logiska värdena används sedan för indexering. 
+
+De vanligaste relationsoperatorer i R är följande:
+
+Relationsoperatorer   |   Symbol i R
+-------------------   | -------------
+lika                  | ==
+inte lika             | !=
+större än eller lika  | >=
+mindre än eller lika  | <=
+större än             | >
+mindre än             | <
+finns i               | %in%
+
+Nedan visas hur de används.
+
+```{r}
+# x är en numerisk vektor som innehåller värdena 1 till 15
+x <- 1:15
+x < 10
+
+x != 5
+
+x %in% c(1,2,7)
+
+!(x == 10)
+```
+
+
+#### 4. Matriser
+
+Matriser är också en av de vanligaste datastruktur i R. Den har två dimensioner, rader och kolumner. Likt som vektorer så kan matriser bara innehålla en typ av element. Det innebär att en matris kan endast vara en textmatris, numerisk matris eller logisk matris. 
+
+Matriserna kan skapas enkelt i R med funktionen **matrix()**.
+
+```{r}
+minMatris <- matrix(data=c(1,2,3,4), nrow=2)
+minMatris
+```
+
+Argumentet byrow = FALSE används i koden nedan. 
+```{r}
+minMatris2 <- matrix(data=c(1,2,3,4,5,6), nrow=3, byrow = FALSE)
+minMatris2
+```
+
+Testa byta FALSE till TRUE. Hur ser matrisen ut då? 
+
+#### 5. Data.frame
+
+Data.frame är "data set" i R som används vanligtvis i analysfunktioner. Det är en stor tabell som innehåller ett antal variabel. Det är egentligen en samling av vektorer i R därför en data.frame kan innehålla olika typer av vektorer som numeriska, logiska, textsträngar och faktorer. 
+
+För att skapa ett dataset i R används funktionen **data.frame()**
+
+```{r}
+minDF<- data.frame(num = 1:3, text = rep("Text", 3), logi=c(TRUE, TRUE, FALSE)) 
+minDF
+```
+
+Det finns ett antal förinstallerade data.frame i R som du kan använda om du vill göra testanalyser eller för att träna koda i R.
+
+För att kolla upp vilka data.frame som finns använd funktionen **data()**
+```{r, eval=FALSE}
+data()
+
+# För att läsa in en data.frame i Global Environment så skriv namn av data inom parentesen
+data(iris)
+iris
+```
+
+#### Utforska en data.frame
+
+Innan man utför en analys eller anpassa någon modell är det viktigt att utforska och undersöka vad man har för data först. Det finns ett antal funktioner som du kan använda för att få en bra känsla för din data. Testa att köra koder nedan. 
+
+```{r, eval=FALSE}
+# Funktioner head() och tail ()
+head(iris)
+tail(iris)
+
+# Funktioner dim(), ncol(), nrow()
+ncol(iris)
+nrow(iris)
+dim(iris)
+
+# Funktioner summary() och str()
+summary(iris)
+str(iris)
+
+# Funktioner names(), colnames() och rownames()
+names(iris)
+colnames(iris)
+rownames(iris)
+```
+
+#### Skapa eller ta bort variabel
+
+Ibland skapar man nya variabler utifrån andra variabler i en data.frame när man utför analyser. I R borde den nya variabeln ha samma längd som antalet rader.
+
+Testa skapa ny variabel som produkten av Petal.Length och Sepal.Width genom att köra koden nedan.
+
+```{r}
+iris$nyVariabel<- iris$Petal.Length * iris$Sepal.Width
+
+head(iris)
+```
+
+Prova skapa nya variabler med: 
+
+1. Summan av *Sepal.Length* och *Sepal.Width*, namnge variablen som summan.
+2. Kvoten av *Petal.Width* och *Petal.Length*, namnge variablen som kvoten.
+
+#### Radera variabeln
+
+För att radera en variabel i en data.frame: 
+
+```{r}
+iris$nyVariabel<- NULL
+head(iris)
+```
+
+#### Ändra variabelnamn
+
+Ibland vill man döpa om namnet på variabler i en data.frame för att det ska bli enkelt för en när man gör analyserna. 
+
+För att ta reda på namn på variabler används funktionen *names()* eller *colnames()*
+
+```{r}
+colnames(iris)
+```
+
+Vill du ändra namn på variabler så gör du det på följande sätt: 
+
+```{r}
+# Ändra första variabeln
+colnames(iris)[1] <- "Oj_EnVariabel"
+colnames(iris)
+
+# Ändra första och andra variabler
+colnames(iris)[1:2] <- c("Sepal.Length", "Sepal_Width")
+colnames(iris)
+
+```
+
+
+#### 6. Listor
+
+Listor är mer generell datastruktur i R. Man kan jämföra lista med en "låda" som innehåller olika datastrukter i R. En lista kan innehålla vektorer, data.frame och matriser, i olika längd och storlek, samtidigt.
+
+För att skapa en lista används funktionen **list()**
+
+```{r}
+# skapar vektorer a, b, c
+a<- c("hej", "Kalle", "hejdå")
+b<- c(TRUE, FALSE, FALSE, TRUE)
+c<- 1:8
+
+x<- list(a,b,c)
+x
+```
+
+Ett mycket vanligt exempel på en lista är modellobjekt, dvs objektet man skapar när man anpassar en modell, till exempel en regressionsmodell. Hela resultatet från modellanpassningen ligger på en lista. Se nedan.
+
+```{r}
+# Skapar en data.frame
+ctl <- c(4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14)
+trt <- c(4.81,4.17,4.41,3.59,5.87,3.83,6.03,4.89,4.32,4.69)
+group <- gl(2, 10, 20, labels = c("Ctl","Trt"))
+weight <- c(ctl, trt)
+
+# Linjär regression.
+lm <- lm(weight ~ group)
+
+is.list(lm)
+
+# Vilka element eller objekt som finns i listan lm? 
+attributes(lm)
+
+```
+
+lm är en lista som innehåller bland annat regressions koefficienter, residualer, anpassade värden, mm.
+
+
+### Datum
+
+I R uttrycks datum som antal dagar från 1970-01-01. Datum som kommer innan det skrivs ut som negativa värde. 
+
+```{r }
+minaDatum <- as.Date(c("2018-08-14", "1970-01-01"))
+
+minaDatum[1] - minaDatum[2]
+
+
+as.Date(17757, origin = "1970-01-01")
+```
+
+**Sys.Date()** ger dagens datum.
+**date()** returnerar dagens veckodag, datum och tid.
+
+#### Olika dataformat 
+
+Symbol i R | Betydelse          | Exempel
+-----------|------------------- | --------
+%d	       | dagnummer          |	01-31
+%a         | förkortad veckodag | Mon
+%A	       | full veckodag      | Monday 
+%m	       | månad nummer       | 00-12
+%b         | förkortad månad    | Jan
+%B	       | full månad         | January
+%y         | 2 siffrig år       | 18
+%Y	       | 4 siffrig år       | 2018
+
+#### Formatera datum 
+
+```{r}
+idag <- Sys.Date()
+
+format_idag <- format(idag, format = "%B %d %Y")
+format_idag
+
+format(minaDatum[2], format="%m/%d/%y")
+```
+
+
+### Indexering
+
+Ibland är man bara intresserad av en kolumn eller enstaka värde. För att indexera eller plocka ut specifikt element ur ett objekt kan man använda sig av hackparentes [] eller dollar tecken $ och detta görs på olika sätt.
+
+#### 1. Genom att ange positions nummer
+
+```{r }
+#Vektor
+testScore <- c(7, 15, 20, 20, 23, 1.2)
+testScore[3] #tredje element
+testScore[-1] #alla utom den första
+```
+
+Kör koden nedan för att se resultatet.
+
+```{r, eval = FALSE }
+
+#Data.frame.
+data(iris)
+iris[, 1] # Väljer kolumn nummer 1
+iris[1:5, c(1,2)] # Rad 1 till 5 på Kolumn 1 och 2
+
+```
+
+#### 2. Genom att begränsa värden som man vill plocka ut 
+
+
+```{r }
+# Vektor
+testScore[testScore < 10] # alla som är mindre än 10
+testScore[testScore == 20] # alla som är lika med 20
+```
+
+Kör koden nedan för att se resultatet.
+
+```{r, eval = FALSE }
+
+# Data.frame
+head(iris[iris[,1] > 7,]) # alla observationer där kolumn nummer 1 är större än 7. Funktionen head() används för att minimera rader som skrivs ut. 
+```
+
+#### 3. Genom att ange namn av elementet eller kolumnen
+
+Det går att namnge element i en vektor. Koder nedan visar hur man ger namn till varje element i en vektor. Efter att ha namngett vektorn kan du nu plocka ut värde med hjälp av namn. 
+
+```{r }
+# Sätter namn på respektive element i testScore
+names(testScore)<- c("Zaida", "Anna", "Helena", "Per", "Filip", "Annelie")
+testScore
+testScore["Per"]
+testScore["Filip"]
+
+# Kolumnen i en data.frame oftast har namn. Objekt som har 2 eller mer dimensioner kan vi använda oss av dollar tecken.   
+colnames(iris)
+```
+
+Kör koden nedan för att se resultatet.
+
+```{r, eval = FALSE }
+
+iris$Sepal.Length
+iris[, "Sepal.Length"]
+
+```
+
+### Sortering
+
+Skulle du behöva sortera element i din vektor så kan du använda funktioner **sort()** eller **order()**. Eller sortera din data.frame baserad på en kolumn kan du använda funktionen **order()**. **sort()** returnerar sorterade värdena medan **order()** returnerar indexer av värdena. Se exempel kod nedan.
+
+```{r}
+vektor<- c(15, 12, 14, 13,-11)
+sort(vektor, decreasing = FALSE)
+sort(vektor, decreasing = TRUE)
+
+order(vektor, decreasing=FALSE) #returnerar indexer 
+order(vektor, decreasing=TRUE)
+
+head(iris[order(iris$Sepal.Length, decreasing=TRUE),])
+```
+
+
+### Grundläggande databearbetning.
+
+Oftast så är databearbetning som tar längst tid när vi gör analyser. Det finns antal bas funktioner i R som är användbara när vi bearbetar data. 
+
+I den här delen fokuserar vi bara på funktioner i base R. De vanligaste funktioner visas i tabellen nedan. 
+
+Funktion    |   Beskrivning
+---------   | --------------
+rbind()     | Kombinerar data.frames radvis
+cbind()     | Kombinerar data.frames kolumnvis
+merge()     | Sammanfogar två data.frames med en ID-variabel
+aggregate() | Aggregerar uppgifter efter en ID-variabel
+
+#### 1. Kombinera data.frames med rbind() och cbind()
+
+Funktionerna **rbind()** och **cbind()** kräver att data.frame ska vara lika långa. Ska man kombinera data radvis borde antal kolumner vara lika. Att kombinera data kolumnvis med cbind() borde antal rader vara lika mellan två data.frame.
+
+Börja med att läsa in data.frame iris och sedan dela den i två delar för att få två olika data.frame med samma storlek
+
+```{r}
+data(iris)
+
+head_iris <- head(iris)
+tail_iris<- tail(iris)
+
+# Kombinera kolumnvis
+column<- cbind(head_iris, tail_iris)
+column
+
+# Kombinera radvis
+rad<- rbind(head_iris, tail_iris)
+rad
+```
+
+#### 2. Sammanfogar data.frame med merge()
+
+För att göra det enkelt kan du använda exempel data från funktionen **merge()**.  Kör koden nedan för att läsa in dem: 
+
+```{r}
+example("merge", echo = FALSE)
+```
+
+Nu har du fått två olika data.frame som heter **authors** och **books**. De är sparade i Global Environment. De tre första raderna av data.frame visas nedan. 
+
+```{r, echo=FALSE}
+head(authors, n=3)
+head(books, n=3)
+```
+
+Prova nu att sammanfoga **authors** och **books** med koden nedan. Kolumner "surname" och "name" från authors respektive books innehåller  egentligen samma information. Detta innebär att surname och name kan användas som ID variabel och eftersom de har olika namn så måste de specifieras i merge funktionen. 
+```{r}
+res1 <- merge(x=authors, y=books, by.x = "surname", by.y = "name")
+res1
+```
+
+#### Aggregera data med aggregate()
+
+Ibland behöver man aggregera delar av data. Detta kan göras enkelt med funktionen aggregate().
+
+I funktionen aggregate() behöver du ange vilken variabel du vill aggregera på, efter vilken ID variabel samt vilken funktion ska användas för aggregering. Se koden nedan.
+
+```{r}
+data(iris) 
+
+agg <- aggregate(x=iris$Sepal.Length, by=list(iris$Species), FUN=mean, rm.na=TRUE) #rm.na = TRUE tar bort alla missing values eller NA
+agg
+```
+
+### Databearbetning och utforskning med dplyr
+
+Det finns också ett antal paket som gör att databearbetning i R blir väldigt smidigt, exempelvis paketet **dplyr**. Detta beror delvis på **pipe** operator, **%>%**, som funkar som kedja och kopplar ihop koder. Det är väldigt effektivt om man ska göra ett antal databearbetningsprocess utan att spara varje steg. Det gör också att det blir lättare att följa upp vad som händer i varje steg.  
+
+
+I nedre exemplet ska vi använda några av de vanligaste funktioner i dplyr paketet. Återigen använder vi iris data för att testa följande funktionerna.
+
+
+#### 1. Skapa eller radera variabler
+
+**mutate()** används för att skapa nya variabler i data.frame. **transmute()** är för att droppa existerande variabler och behåller endast den nya variabeln du skapade.
+
+```{r, message=FALSE}
+library(dplyr)
+```
+
+```{r}
+data(iris)
+
+# mutate
+mutate_iris<- iris %>% 
+  mutate(Sepal.Length2 = Sepal.Length ** 2)
+head(mutate_iris)
+
+# transmute
+transmute_iris<- iris %>% 
+  transmute(Sepal.Length2 = Sepal.Length ** 2)
+head(transmute_iris)
+```
+
+#### 2. Filtrera
+**filter()** funktionen används för att filtrera data enligt någon villkor du vill. 
+```{r}
+data(iris) 
+
+setosa <- filter(iris, Species == "setosa") 
+head(setosa) # använde head() för att begränsa resultatet som skrivs ut.
+```
+
+
+#### 3. Aggregering och gruppering
+
+**summarise()** funkar som funktionen aggregate(). **group_by** används om vi vill undersöka data per grupp. 
+
+```{r}
+# Aggregera på medelvärde
+iris %>% 
+  summarise(mean = mean(Petal.Width), n=n()) # n() ger oss antal observationer.
+
+# Aggregerade data per Speices
+
+iris %>% 
+  group_by(Species) %>%
+  summarise(mean = mean(Petal.Width), median = median(Sepal.Width),  n=n())
+
+```
+
+### Exempel på vanlig databearbetning med dplyr 
+
+1. Läs in data. 
+2. Skapa ny variabel.
+3. Transformera för att få den önskade fördelningen. Detta beror på vilken statistik metod man använder.
+4. Ta bort eller imputera saknade värde.
+
+```{r, eval=FALSE}
+# Kör koden nedan i din RStudio för att se resultatet.
+iris %>%
+  # Nya variabler och transformering genom log()
+  mutate(Sepal.Length.Width = Sepal.Length*Sepal.Width, Log.Petal.Width = log(Petal.Width)) %>% 
+  #na.omit() %>%  # Vill du ta bort alla saknade värde då kan du köra denna funktion. 
+   # om det finns saknade värde i kolumnen Sepal.Length imputera vi dem till medelvärde
+  mutate(Sepal.Length = ifelse(is.na(Sepal.Length), mean(Sepal.Length), Sepal.Length))
+ 
+```
+
+
+Det finns fler funktioner inom paketet dplyr som är väldigt användbar i data utforskning och bearbetning. Här kommer en länk till dplyr paket dokumentation. Du finner olika funktioner och exempel på hur man kan använda dem i ditt arbete: https://www.rdocumentation.org/packages/dplyr/versions/0.5.0
+
+### Filhantering
+
+När man arbetar med R använder man alltid en *working directory* eller sökväg.
+
+1. För att ta reda på vilken sökväg du arbetar på används funktionen getwd()
+
+```{r, eval=FALSE}
+getwd()
+```
+
+2. För att sätta upp sökvägen kan du använda funktionen setwd()
+
+```{r, eval=FALSE}
+setwd("sökvägen")
+```
+
+3. Med funktionen dir() kan du se vilka filer som finns i din nuvarande sökvägen. 
+
+```{r, eval=FALSE}
+dir()
+```
+
+### Input
+
+Det är inte ofta man arbetar med de förinstallerade data.frame som finns i R. Det är vanligare att man behöver läsa in en extern fil till RStudio. Det kan du göra med flera olika funktioner beroende på typ av fil du ska använda. De vanligaste typer av filer är csv, txt eller excel filer. 
+
+För att läsa in csv och text filer så finns det read.csv() respektive read.table(). 
+
+```{r, eval=FALSE}
+# Om filen är en text fil
+lemon <- read.table(file="lemon.txt", sep=";", header=TRUE)
+
+# Om file är en csv fil
+apple <- read.csv(file="Apple.csv", sep=";", header=TRUE)
+```
+
+
+### Output
+
+När du är klar med databearbetning, alltså när data är redo för analys eller bygga en modell vill man oftast spara den i lokala disken så att man inte behöver repetera hela databearbetningsprocess.
+
+För att spara data.frame i lokal disken kan man använda funktioner write.csv() och write.table() om du vill spara dem som csv respektive text fil. Filerna hamnar då i den nuvarande sökvägen.
+
+```{r, eval=F}
+#csv-fil
+write.csv(apple, file="Apple.csv")
+
+#text fil
+write.table(lemon, file="lemon.txt")
+
+```
+
+För att hantera excel filer krävs det att installera paket. Ett exempel på ett paket som kan hantera excel filer är paketet **xlsx**.
+
+### Paket inläsning
+
+I R finns det tusentals paket som är skrivna av R experter för att göra arbetet i R så smidigt som möjligt. Paketet är Open Source, vilket betyder att vem som helst kan ta del av det. För att se vilka paket som finns installerade i din dator kan man bläddra under fönstret **Packages**.
+
+För att installera ett paket och sedan läsa in det i RStudio, se exempel kod nedan. 
+
+Package MASS har ett antal funktioner som man kan använda för statistiska analyser.
+
+```{r, eval=F}
+# Installera paket MASS
+install.packages("MASS")
+```
+
+När installationen är färdig måste paketet vara inläst i RStudio innan du kan använda det. Det gör du enkelt med:
+
+```{r, eval=F}
+library(MASS)
+```
+
+
+#### Referenser:
+
+https://www.r-bloggers.com/data-manipulation-with-dplyr/
+https://www.statmethods.net/input/dates.html
+
+
+
