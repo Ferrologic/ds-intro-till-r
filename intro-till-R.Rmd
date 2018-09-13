@@ -12,25 +12,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### R och RStudio
 
-Platformen som du ska arbeta i är RStudio. RStudio är en så kallad **IDE (Integrated Development Environment)** och programmeringsspråket heter R. 
+Plattformen som du ska arbeta i är RStudio. RStudio är en så kallad **IDE (Integrated Development Environment)** och programmeringsspråket heter R. 
 
-I RStudio finns det fyra olika fönster: "Global Environment", "File", "Console", "R script".
+I RStudio finns det fyra olika fönster: `Global Environment`, `File`, `Console`, `R script`.
 
-1. Alla objekt som skapas i R sparas i **Global Environment**. Det finner du i den övre delen till höger av skärmen.
+1. Alla objekt som skapas i R sparas i **Global Environment**. Den finner du i den övre delen till höger av skärmen.
 
-2. Fönstret i nedre delen till höger ser du **Files** där du hittar filerna som finns i din dator. Det går också se **plottar**, **dokumentationer om funktioner** och vilka **paket** som finns installerade i din RStudio.
+2. Fönstret i nedre delen till höger ser du **Files** där du hittar filerna som finns i din dator. Där kommer du också att se **plots**, **dokumentation om funktioner** och vilka **paket** som finns installerade.
 
-3. För att skriva R-skript öppnas ett nytt fönster med **R script**. Det brukar vara under Global environment.
+3. Nere till vänster ser du din **Console** där du kan skriva och exekvera kod.
 
-4. I **Console** ser vi resultatet när vi kör R-skript. Varningar och felmeddelande ser vi också i den här rutan. Det går även att skriva kod i consolen, dock går det inte att spara koden. Consolen finner du under R script fönster.
+4. Ofast vill du dock kunna spara din kod, det går inte i din **Console**, istället kan du använda **R script** för att spara och enklare redigera din kod. **R script** öppnas per default uppe till höger i RStudio.
 
+Ordningen på de olika fönstrena kan du själv ändra under `Tools -> Global Options -> Pane Layout`
 
 ### R som miniräknare
 
-Liksom alla programmeringsspråk kan R användas som miniräknare.
+Liksom de flesta programmeringsspråk kan R användas som miniräknare.
 
 1. Gör följande beräkningar i "Console"
-
 ```{r, eval=FALSE}
 # Addition
 2 + 2
@@ -50,92 +50,215 @@ Liksom alla programmeringsspråk kan R användas som miniräknare.
 
 ```
 
-2. Det finns också såklart en konstanter i R. 
+2. Spara dina beräkningar som objekt
+Du kan spara ovanstående beräkningar som `objekt` i R, dessa kan du senare använda. För att spara något till ett objekt använder du R:s `assignment operator` som är `<-`. Exempelvis:
 
-```{r, eval=FALSE }
-# Pi
-pi
-
-# e
-exp(1)
+```{r}
+x <- 10*10
 ```
 
-3. Utöver numeriska värdena och konstanter finns det också matematiska funktioner. 
+Du kan även spara flera värden i ett och samma objekt genom att skriva `c()` runt dina värden, då kallas objektet för en `vector`.
 
-```{r, eval=FALSE}
-# Logaritm
-log(100)
-
-# Rot
-sqrt(100)
-
-# Absolut värde
-abs(-3)
-
-#Trigonometriska funktioner
-cos(pi)
-sin(pi)
-tan(pi)
+```{r}
+x <- c(10*10, 100/2, 2^2)
 ```
 
-### Objekt och variabel
+Objekt kan inte bara innehålla numeriska värden utan även exempelvis text. 
 
-Du kan alltid spara dina beräkningar i R. När beräkningarna är nedsparade så kallas det för **objekt**. Objekt kan vara olika typer av element så som textsträng, numeriska värden, faktor, etc.
+```{r}
+text <- c("hej", "jag", "älskar", "r", ":)")
+```
 
-Objekt sparas enkelt med en **<-** eller **=**. Prova köra kod nedan för att skapa vektorer.
+### Funktioner
+I R finns ett stort antal inbyggda statistiska funktioner.
 
-```{r }
-# Numerisk variabel
-minNum<- 2017
+Varje funktion följer principen:
+```{r}
+funktionens_namn(arg1 = val1, arg2 = val2, ...)
+```
 
-# Textsträng
-minText<- "Kalle Anka"
+Prova att använda funktionen `mean()` på ditt objekt `x`.
+```{r}
+mean(x)
+```
 
+Vill du veta mer om en funktion kan du skriva `?mean()` i din **Console**, då kommer dokumentationen för funktionen upp.
+
+## Paket
+Funktioner i R är sparade i så kallade `packages`, `mean()` är exempelvis sparat i paketet `stats` som laddas automatiskt när du startar R. Styrkan i R ligger i dess alla olika paket. Du installerar paket med `install.packages("package")` och laddar dem med `library(paket)`. 
+
+För att fortsätta med introduktionen kommer vi här använda oss av paketet `nycflights13` som innehåller data för alla flygplan som lämnade New York under 2013. 
+```{r}
+#install.packages("nycflights13")
+library(nycflights13)
 ```
 
 ### Variabeltyper
 
 Det finns olika variabeltyper i R och de vanligaste beskrivs i tabellen nedan.
 
-Beskrivning    | Synonymer                    |  typeof() | Exempel
-------------   | ---------------------------- | --------- | -------
-Heltal         | int, numeric                 | integer   | -2, 0, 1
-Reella tal     | real, double, float, numeric | double    | 1.03, 0.22
-Komplexa tal   | cplx                         | complex   | 1+2i
-Logiska värden | booelan, bool, logi          | logical   | TRUE, FALSE
-Text           | string, char                 | character | "Hello R!"
+Beskrivning    | Synonymer                     |  typeof() | Exempel
+------------   | ----------------------------  | --------- | -------
+Heltal         | int, numeric                  | integer   | -2, 0, 1
+Reella tal     | real, double, float, numeric  | double    | 1.03, 0.22
+Komplexa tal   | cplx                          | complex   | 1+2i
+Logiska värden | booelan, bool, logi           | logical   | TRUE, FALSE
+Faktorer       | factors                       | fctr      | "Women"
+Datum          | dates                         | date      | "2017-02-04"
+Text           | string, char                  | character | "Hello R!"
 
-
-För att undersöka typ av variabler kan du använda funktionen **class()**
-
-```{r}
-class(minNum)
-class(minText)
-```
-
-För att konvertera en typ av variabel till någon annan kan funktioner i tabellen nedan användas. 
-
-Funktion        | Typ
---------------- |-------
-as.numeric()    | numerisk
-as.character()  | textsträng
-as.integer()    | integer
-as.factor()     | faktor
-as.data.frame() | data frame
-as.logical()    | logiska värde
-as.Date()       | datum
-
-Exempel:
+För att kika på data som finns i paketet du laddat kan du helt enkelt skriva namnet på data `flights` i din **Console**.
 
 ```{r}
-# Ändra numerisk vektorn testScore till en sträng
-text_minNum<- as.character(minNum)
-class(text_minNum)
-
-factor_minText<- as.factor(minText)
-class(factor_minText)
+flights
 ```
 
+Här ser du enkelt vilka variabeltyper som finns i din data.
+
+`flights` är en så kallad data.frame som egentligen är en samling vektorer. data.frame är den vanligaste data-typen i R och den vi kommer att arbeta med. 
+
+Om du är nyfiken på att undersöka variabeltypen, eller klassen, på ett objekt eller en kolumn kan du använda funktionen **class()**
+
+```{r}
+class(x)
+class(text)
+```
+
+#### Datamanipulering
+Det sägs ofta att en Data Scientist ägnar 80% av sin tid till att manipulera data så att den går att visualisera och modellera. Därför är det klokt att välja en metod och ett paket som underlättar det arbetet för dig. 
+
+I den här introduktionen kommer vi att fokusera på att använda paketet `dplyr` för att göra datamanipuleringar. `dplyr` är ett av de mest populära paketen i R och ger dig en bred verktygslåda för att manipulera data. `dplyr` ingår också i ett samlingspaket som heter `tidyverse` och samlar flertalet paket för datamanipulering, visualisering och modellering. 
+`dplyr` har ett antal *verb*  för att göra manipuleringar. De som används mest är:
+- filter() där du väljer observationer baserat på deras värden
+- arrange() som ändrar ordningen på rader
+- select() för att välja variabler baserat på deras namn
+- mutate() för att skapa nya variabler baserat på funktioner
+- summarise() för att summera många värden till ett värde
+
+Samtliga av dessa verb kan användas i kombination med funktionen `group_by()` som innebär att du utför verben på flera grupper. 
+
+Alla verb i `dplyr` är konsekventa. Det första argumentet är din data och i det andra argumentet specificerar du vad du vill göra med din data. Resultatet är alltid en ny data.frame. 
+
+#### Filter
+Med filter kan du enkelt filtrerar din data baserat på villkor. 
+
+Dessa villkor uttrycks med hjälp av `logical operators`.
+
+I R är dessa:
+
+Operator | Symbol i R
+-------- | ---------- 
+och (and)|    &
+eller(or)|    | 
+icke(not)|    !
+
+##### Relationsoperatorer
+Man vill ofta jämföra olika vektorer för att sedan indexera en datamängd. Detta görs med hjälp av relationsoperatorer som beskrivs nedan.
+
+Relationsoperatorer   |   Symbol i R
+-------------------   | -------------
+lika                  | ==
+inte lika             | !=
+större än eller lika  | >=
+mindre än eller lika  | <=
+större än             | >
+mindre än             | <
+finns i               | %in%
+
+Dessa kan du använda i `filter()`.
+
+PS: Det vanligaste misstaget i början av din R-karriär är att skriva `=` istället för `==`.
+
+```{r}
+library(dplyr)
+filter(flights, month == 2, arr_time == 830)
+```
+
+För att använda relationsoperatorerna följer du samma princip.
+
+```{r}
+filter(flights, carrier %in% c("UA", "DL"), month == 2 | month == 3, dep_delay <= 0)
+```
+
+#### Missing values NA
+Till en början kan det vara lite förvirrande att söka efter saknade värden i R, dessa representeras av `NA`. Då skriver man inte `filter(data, var == NA)` utan man skriver `filter(data, is.na(var))`. Det är för att `NA` inte är ett värde, det är ett saknat värde. En variabel måste ha ett värde för att du ska kunna utföra logiska operationer. Det kan kännas ologiskt (hehe) i början men det är en av R:s styrkor.
+
+#### Arrange 
+`arrange()` kastar om ordningen på dina rader enligt en av dig vald variabel. Exempelvis kanske vi vill sortera data på försenade avgångar `dep_delay`.
+
+```{r}
+arrange(flights, arr_delay)
+```
+
+`arrange()` sorterar per default på sjunkande värde (ascending). Vill du sortera på stigande värde (descending) sätter du `desc()` runt din variabel.
+
+```{r}
+arrange(flights, desc(dep_delay))
+```
+
+#### Select
+Medan `arrange()` kastar om raderna så kastar `select()` om kolumnerna. Men mest används den för att välja kolumner av intresse.
+
+```{r}
+select(flights, dep_delay, carrier)
+```
+
+Om du av något skäl vill flytta en kolumn till början kan du skriva:
+
+```{r}
+select(flights, carrier, everything())
+```
+
+Du kan även välja alla kolumner mellan två kolumner:
+
+```{r}
+select(flights, year:day)
+```
+
+Genom att sätta ett minus framför variabelnamnet exkluderar du variabeln.
+
+```{r}
+select(flights, -year)
+```
+
+#### Mutate
+`mutate()` används för att skapa nya variabler.
+
+Exempelvis kan vi räkna ut hur mycket tid man vunnit om exempelvis flyget landar tidigare än avsett.
+
+```{r}
+mutate(flights, beer_time = dep_delay - arr_delay)
+```
+
+I `mutate()` kan du även använda funktioner såsom `mean()`. Men de kommer att bli mer vettiga i `summarise()`
+
+```{r}
+mutate(flights, mean_delay = mean(dep_delay, na.rm = T))
+```
+#### Summarise
+Ofta vill man summera variabler för att få ut intressant information. Exempelvis vill vi här kanske veta en rad medelvärden.
+
+```{r}
+summarise(flights, 
+          mean_air_time = mean(air_time, na.rm = T),
+          mean_dep_delay = mean(dep_delay, na.rm = T),
+          mean_arr_delay = mean(arr_delay, na.rm = T))
+```
+
+Men dessa värden är inte så intressanta i sig, utan vi vill kunna göra jämförelse. Då använder vi `group_by()`.
+
+```{r}
+group_by_flights <- group_by(flights, carrier)
+
+summarise(group_by_flights, 
+          mean_air_time = mean(air_time, na.rm = T),
+          mean_dep_delay = mean(dep_delay, na.rm = T),
+          mean_arr_delay = mean(arr_delay, na.rm = T))
+```
+
+I `summarise()` kan du använda en rad olika funktioner såsom `sum()` för summeringar, `median()` etc. 
+
+#### Väv ihop verben med %>%
 
 #### 1. Vektorer
 
@@ -151,26 +274,22 @@ charvec<- c("Kalle", "Anka")
 
 #### 2. Faktorvariabel
 
-En annan typ av variabel är den såkallade faktorer, *factor*. Faktorvariabler används främst för att spara minne och för analysfunktioner. Dummyvariabler är ett exempel av faktorvariabel. 
-
-Textdata som läses in i R konverteras till faktor om inte argumentet
-**stringAsFactors = FALSE**. För att få en bättre bild av faktorvariabler se koden nedan.
+En annan typ av variabel är den såkallade faktorer, *factor*. Faktorer är kategoriska variabler som har olika nivåer som representerar fakta. Kön eller åldersgrupp är exempel på faktorer.
 
 ```{r}
 # minText är en textvektor
-minText<- c("A", "B", "A", "A")
+min_text <- c("A", "B", "A", "A")
 
 # Konvertera minText till faktorvariabel med as.factor
-minFaktor<- as.factor(minText)
+min_faktor <- as.factor(min_text)
 
-minFaktor
+min_faktor
 
 # För att undersöka klassen av vektorn minFaktor
-class(minFaktor)
+class(min_faktor)
 
 # För att undersöka vilka unika värden finns på minFaktor 
-levels(minFaktor)
-
+levels(min_faktor)
 ```
 
 #### 3. Logik
@@ -186,7 +305,7 @@ De viktigaste operatorerna i R visas i tabellen nedan.
 Operator | Symbol i R
 -------- | ---------- 
 och (and)|    &
-eller(or)|    \| 
+eller(or)|    | 
 icke(not)|    !
 
 #### Relationsoperatorer
